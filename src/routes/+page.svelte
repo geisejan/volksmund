@@ -93,7 +93,7 @@
 <div class="max-w-6xl mx-auto px-4">
 
 	<!-- HERO + CHAT -->
-	<section class="min-h-[calc(100vh-2.75rem)] flex flex-col justify-center pt-4 pb-6 sm:pt-6 sm:pb-12 border-b border-swiss-border">
+	<section class="min-h-[calc(100dvh-2.75rem)] flex flex-col justify-start sm:justify-center pt-6 pb-8 sm:pt-6 sm:pb-12 border-b border-swiss-border">
 
 		<!-- INITIATIVEN LABELS -->
 		<div class="flex gap-2 mb-3 overflow-x-auto no-scrollbar pb-1">
@@ -110,7 +110,7 @@
 		<!-- DIE SCHWEIZ + CHAT -->
 		<div class="flex items-start gap-3 sm:gap-5 mb-4 w-full">
 			<div class="relative flex-shrink-0">
-				<div class="w-20 h-20 sm:w-28 sm:h-28">
+				<div class="w-14 h-14 sm:w-28 sm:h-28">
 					<img src="/logo.png" alt="Volksmund" class="w-full h-full object-contain" />
 				</div>
 				<div class="absolute bottom-1 right-1 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-swiss-dark animate-pulse-slow"></div>
@@ -168,7 +168,6 @@
 					placeholder="Schreib was du denkst…"
 					rows="1"
 					disabled={loading}
-					autofocus
 					class="flex-1 bg-transparent px-4 py-3 sm:px-5 sm:py-4 text-swiss-warm text-base placeholder:text-swiss-muted/40 resize-none focus:outline-none disabled:opacity-50"
 					style="field-sizing: content; min-height: 52px; max-height: 120px;"
 				></textarea>
