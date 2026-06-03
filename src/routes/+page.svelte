@@ -96,10 +96,10 @@
 	<section class="flex flex-col pt-5 pb-6 sm:min-h-[calc(100dvh-2.75rem)] sm:justify-center sm:pt-6 sm:pb-12 border-b border-swiss-border">
 
 		<!-- INITIATIVEN LABELS -->
-		<div class="flex gap-2 mb-4 overflow-x-auto no-scrollbar pb-1">
-			<span class="text-xs font-mono border border-swiss-border text-swiss-muted px-2 py-1 whitespace-nowrap flex-shrink-0">«Keine 10-Mio-Schweiz»</span>
-			<span class="text-xs font-mono border border-swiss-border text-swiss-muted px-2 py-1 whitespace-nowrap flex-shrink-0">Zivildienstgesetz</span>
-			<span class="text-xs font-mono text-swiss-red px-2 py-1 border border-swiss-red/30 whitespace-nowrap flex-shrink-0">14. Juni 2026</span>
+		<div class="flex flex-wrap gap-2 mb-4">
+			<span class="text-xs font-mono border border-swiss-border text-swiss-muted px-2 py-1 whitespace-nowrap">«Keine 10-Mio-Schweiz»</span>
+			<span class="text-xs font-mono border border-swiss-border text-swiss-muted px-2 py-1 whitespace-nowrap">Zivildienstgesetz</span>
+			<span class="text-xs font-mono text-swiss-red px-2 py-1 border border-swiss-red/30 whitespace-nowrap">14. Juni 2026</span>
 		</div>
 
 		<!-- HERO -->
@@ -108,18 +108,12 @@
 		</h1>
 
 		<!-- DIE SCHWEIZ + CHAT -->
-		<div class="flex items-start gap-3 sm:gap-5 mb-4 w-full">
-			<div class="relative flex-shrink-0">
-				<div class="w-12 h-12 sm:w-28 sm:h-28">
-					<img src="/logo.png" alt="Volksmund" class="w-full h-full object-contain" />
-				</div>
-				<div class="absolute bottom-0 right-0 w-2 h-2 bg-green-400 rounded-full border-2 border-swiss-dark animate-pulse-slow"></div>
+		<div class="mb-4 w-full">
+			<div class="flex items-center gap-2 mb-3">
+				<div class="w-2 h-2 bg-green-400 rounded-full animate-pulse-slow"></div>
+				<p class="text-swiss-muted text-xs font-mono">Die Schweiz · gerade online</p>
 			</div>
 			<div class="flex-1 min-w-0">
-				<div class="flex items-center gap-2 mb-2">
-					<div class="w-2 h-2 bg-green-400 rounded-full animate-pulse-slow"></div>
-					<p class="text-swiss-muted text-xs font-mono">Die Schweiz · gerade online</p>
-				</div>
 				<div bind:this={chatContainer} class="space-y-3">
 					{#each messages as msg, i}
 						{#if msg.role === 'assistant'}
@@ -140,7 +134,6 @@
 							</div>
 						{/if}
 					{/each}
-				</div>
 			</div>
 		</div>
 
