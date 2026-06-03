@@ -1,5 +1,17 @@
 <script>
 	import { vorlagen, urteilConfig } from '$lib/fakten.js';
+	import { onMount } from 'svelte';
+
+	let heroSection = $state(null);
+
+	onMount(() => {
+		const setHeight = () => {
+			if (heroSection) heroSection.style.height = window.innerHeight - 44 + 'px';
+		};
+		setHeight();
+		window.addEventListener('resize', setHeight);
+		return () => window.removeEventListener('resize', setHeight);
+	});
 
 	// Chat state
 	let messages = $state([
@@ -93,7 +105,7 @@
 <div class="max-w-6xl mx-auto px-4">
 
 	<!-- HERO + CHAT -->
-	<section class="flex flex-col pt-5 pb-6 sm:min-h-[calc(100dvh-2.75rem)] sm:justify-center sm:pt-6 sm:pb-12 border-b border-swiss-border">
+	<section bind:this={heroSection} class="flex flex-col justify-start pt-5 pb-6 sm:min-h-[calc(100dvh-2.75rem)] sm:justify-center sm:pt-6 sm:pb-12 border-b border-swiss-border">
 
 		<!-- INITIATIVEN LABELS -->
 		<div class="flex flex-wrap gap-2 mb-4">
@@ -139,17 +151,17 @@
 
 		<!-- SCHNELLEINSTIEG -->
 		{#if messages.length === 1 && !loading}
-			<div class="mb-4">
-				<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-					{#each suggestions as s}
-						<button
-							onclick={() => sendMessage(s)}
-							class="text-xs sm:text-sm text-swiss-warm border border-swiss-border px-3 py-2 sm:px-4 sm:py-2.5 hover:border-swiss-red hover:bg-swiss-red/10 active:bg-swiss-red/20 transition-all duration-150 font-medium whitespace-nowrap flex-shrink-0"
-						>«{s}»</button>
-					{/each}
-				</div>
+			<div class="mb-4 flex flex-col gap-2 sm:flex-row sm:overflow-x-auto sm:no-scrollbar sm:pb-1">
+				{#each suggestions as s}
+					<button
+						onclick={() => sendMessage(s)}
+						class="text-xs sm:text-sm text-swiss-warm border border-swiss-border px-3 py-2.5 sm:px-4 sm:py-2.5 hover:border-swiss-red hover:bg-swiss-red/10 active:bg-swiss-red/20 transition-all duration-150 font-medium text-left sm:whitespace-nowrap sm:flex-shrink-0"
+					>«{s}»</button>
+				{/each}
 			</div>
 		{/if}
+
+		<div class="flex-1"></div>
 
 		<!-- INPUT -->
 		<div class="w-full">
