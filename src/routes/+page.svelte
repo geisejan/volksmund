@@ -2,15 +2,27 @@
 	import { vorlagen, urteilConfig } from '$lib/fakten.js';
 	import { onMount } from 'svelte';
 
-	let heroSection = $state(null);
+	let inputBar = $state(null);
 
 	onMount(() => {
-		const setHeight = () => {
-			if (heroSection) heroSection.style.height = window.innerHeight - 44 + 'px';
+		if (typeof window === 'undefined') return;
+
+		// iOS: fixed input folgt dem Keyboard via visualViewport
+		const vv = window.visualViewport;
+		if (!vv) return;
+
+		const reposition = () => {
+			if (!inputBar) return;
+			const offset = window.innerHeight - vv.height - vv.offsetTop;
+			inputBar.style.transform = `translateY(-${Math.max(0, offset)}px)`;
 		};
-		setHeight();
-		window.addEventListener('resize', setHeight);
-		return () => window.removeEventListener('resize', setHeight);
+
+		vv.addEventListener('resize', reposition);
+		vv.addEventListener('scroll', reposition);
+		return () => {
+			vv.removeEventListener('resize', reposition);
+			vv.removeEventListener('scroll', reposition);
+		};
 	});
 
 	// Chat state
@@ -104,9 +116,11 @@
 <!-- PAGE -->
 <div class="max-w-6xl mx-auto px-4">
 
-	<!-- HERO + CHAT -->
-	<section bind:this={heroSection} class="flex flex-col justify-start pt-5 pb-6 sm:min-h-[calc(100dvh-2.75rem)] sm:justify-center sm:pt-6 sm:pb-12 border-b border-swiss-border">
-
+	<!-- HERO + CHAT — Mobile: volle Höhe mit Padding für fixed Input -->
+	<section
+		class="flex flex-col pt-5 pb-28 sm:pb-12 sm:min-h-[calc(100dvh-2.75rem)] sm:justify-center sm:pt-6 border-b border-swiss-border"
+		style="min-height: calc(100svh - 2.75rem)"
+	>
 		<!-- INITIATIVEN LABELS -->
 		<div class="flex flex-wrap gap-2 mb-4">
 			<span class="text-xs font-mono border border-swiss-border text-swiss-muted px-2 py-1 whitespace-nowrap">«Keine 10-Mio-Schweiz»</span>
@@ -125,47 +139,44 @@
 				<div class="w-2 h-2 bg-green-400 rounded-full animate-pulse-slow"></div>
 				<p class="text-swiss-muted text-xs font-mono">Die Schweiz · gerade online</p>
 			</div>
-			<div class="flex-1 min-w-0">
-				<div bind:this={chatContainer} class="space-y-3">
-					{#each messages as msg, i}
-						{#if msg.role === 'assistant'}
-							{#if msg.content === '' && loading && i === messages.length - 1}
-								<div class="flex gap-1.5 py-1">
-									<div class="w-2 h-2 bg-swiss-muted rounded-full animate-bounce" style="animation-delay:0ms"></div>
-									<div class="w-2 h-2 bg-swiss-muted rounded-full animate-bounce" style="animation-delay:150ms"></div>
-									<div class="w-2 h-2 bg-swiss-muted rounded-full animate-bounce" style="animation-delay:300ms"></div>
-								</div>
-							{:else}
-								<p class="text-swiss-warm text-sm sm:text-base leading-relaxed font-medium whitespace-pre-wrap">{msg.content}</p>
-							{/if}
-						{:else}
-							<div class="flex justify-end">
-								<div class="bg-swiss-red/10 border border-swiss-red/30 px-3 py-2 max-w-[85%]">
-									<p class="text-swiss-warm text-sm sm:text-base">{msg.content}</p>
-								</div>
+			<div bind:this={chatContainer} class="space-y-3">
+				{#each messages as msg, i}
+					{#if msg.role === 'assistant'}
+						{#if msg.content === '' && loading && i === messages.length - 1}
+							<div class="flex gap-1.5 py-1">
+								<div class="w-2 h-2 bg-swiss-muted rounded-full animate-bounce" style="animation-delay:0ms"></div>
+								<div class="w-2 h-2 bg-swiss-muted rounded-full animate-bounce" style="animation-delay:150ms"></div>
+								<div class="w-2 h-2 bg-swiss-muted rounded-full animate-bounce" style="animation-delay:300ms"></div>
 							</div>
+						{:else}
+							<p class="text-swiss-warm text-sm sm:text-base leading-relaxed font-medium whitespace-pre-wrap">{msg.content}</p>
 						{/if}
-					{/each}
+					{:else}
+						<div class="flex justify-end">
+							<div class="bg-swiss-red/10 border border-swiss-red/30 px-3 py-2 max-w-[85%]">
+								<p class="text-swiss-warm text-sm sm:text-base">{msg.content}</p>
+							</div>
+						</div>
+					{/if}
+				{/each}
 			</div>
 		</div>
 
 		<!-- SCHNELLEINSTIEG -->
 		{#if messages.length === 1 && !loading}
-			<div class="mb-4 flex flex-col gap-2 sm:flex-row sm:overflow-x-auto sm:no-scrollbar sm:pb-1">
+			<div class="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
 				{#each suggestions as s}
 					<button
 						onclick={() => sendMessage(s)}
-						class="text-xs sm:text-sm text-swiss-warm border border-swiss-border px-3 py-2.5 sm:px-4 sm:py-2.5 hover:border-swiss-red hover:bg-swiss-red/10 active:bg-swiss-red/20 transition-all duration-150 font-medium text-left sm:whitespace-nowrap sm:flex-shrink-0"
+						class="text-xs sm:text-sm text-swiss-warm border border-swiss-border px-3 py-2.5 hover:border-swiss-red hover:bg-swiss-red/10 active:bg-swiss-red/20 transition-all duration-150 font-medium text-left"
 					>«{s}»</button>
 				{/each}
 			</div>
 		{/if}
 
-		<div class="flex-1"></div>
-
-		<!-- INPUT -->
-		<div class="w-full">
-			<p class="text-swiss-muted text-xs mb-2 font-mono hidden sm:block">↓ Deine Meinung — tippe und drück Enter</p>
+		<!-- INPUT — Desktop only (Mobile hat fixed bar unten) -->
+		<div class="hidden sm:block mt-6">
+			<p class="text-swiss-muted text-xs mb-2 font-mono">↓ Deine Meinung — tippe und drück Enter</p>
 			<div class="flex border-2 border-swiss-red focus-within:border-white transition-colors duration-150">
 				<textarea
 					bind:value={input}
@@ -173,13 +184,13 @@
 					placeholder="Schreib was du denkst…"
 					rows="1"
 					disabled={loading}
-					class="flex-1 bg-transparent px-4 py-3 sm:px-5 sm:py-4 text-swiss-warm text-base placeholder:text-swiss-muted/40 resize-none focus:outline-none disabled:opacity-50"
+					class="flex-1 bg-transparent px-5 py-4 text-swiss-warm text-base placeholder:text-swiss-muted/40 resize-none focus:outline-none disabled:opacity-50"
 					style="field-sizing: content; min-height: 52px; max-height: 120px;"
 				></textarea>
 				<button
 					onclick={() => sendMessage()}
 					disabled={loading || !input.trim()}
-					class="bg-swiss-red text-white px-5 sm:px-7 font-black text-lg hover:bg-red-700 active:bg-red-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0 self-stretch flex items-center"
+					class="bg-swiss-red text-white px-7 font-black text-lg hover:bg-red-700 active:bg-red-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0 self-stretch flex items-center"
 				>→</button>
 			</div>
 		</div>
@@ -198,8 +209,6 @@
 		<div class="pb-10">
 			{#each vorlagen as vorlage}
 				<section id={vorlage.id} class="py-10 border-t border-swiss-border">
-
-					<!-- VORLAGE HEADER -->
 					<div class="flex flex-wrap items-start gap-4 mb-6">
 						<div class="flex-1 min-w-0">
 							<div class="flex flex-wrap gap-2 mb-2">
@@ -213,8 +222,6 @@
 						</div>
 						<p class="text-swiss-muted text-sm leading-relaxed max-w-md">{vorlage.zusammenfassung}</p>
 					</div>
-
-					<!-- COLUMN LABELS -->
 					<div class="grid grid-cols-2 gap-3 mb-3">
 						<div class="flex items-center gap-2">
 							<div class="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></div>
@@ -225,8 +232,6 @@
 							<span class="text-xs font-mono text-swiss-muted uppercase tracking-widest">Was wirklich stimmt</span>
 						</div>
 					</div>
-
-					<!-- VERGLEICH ROWS -->
 					<div class="space-y-2">
 						{#each vorlage.vergleiche as v}
 							<div class="grid grid-cols-2 gap-0 overflow-hidden border border-swiss-border">
@@ -252,9 +257,33 @@
 	</details>
 
 	<!-- FOOTER -->
-	<footer class="border-t border-swiss-border py-8 text-center">
+	<footer class="border-t border-swiss-border py-8 text-center mb-20 sm:mb-0">
 		<p class="text-swiss-muted text-xs font-mono">Volksmund · Keine Partei · Keine PR · Nur Fakten · 14. Juni 2026</p>
 		<p class="text-swiss-border text-xs mt-1">Quellen: BFS, EJPD, SRF Faktencheck, Studie SEM 2026, SECO, BSV</p>
 	</footer>
 
+</div>
+
+<!-- FIXED INPUT BAR — nur Mobile -->
+<div
+	bind:this={inputBar}
+	class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-swiss-dark border-t border-swiss-border px-4 py-3"
+	style="padding-bottom: max(12px, env(safe-area-inset-bottom))"
+>
+	<div class="flex border-2 border-swiss-red focus-within:border-white transition-colors duration-150">
+		<textarea
+			bind:value={input}
+			onkeydown={handleKey}
+			placeholder="Schreib was du denkst…"
+			rows="1"
+			disabled={loading}
+			class="flex-1 bg-transparent px-4 py-3 text-swiss-warm text-base placeholder:text-swiss-muted/40 resize-none focus:outline-none disabled:opacity-50"
+			style="field-sizing: content; min-height: 48px; max-height: 100px;"
+		></textarea>
+		<button
+			onclick={() => sendMessage()}
+			disabled={loading || !input.trim()}
+			class="bg-swiss-red text-white px-5 font-black text-lg hover:bg-red-700 active:bg-red-800 transition-colors disabled:opacity-30 disabled:cursor-not-allowed flex-shrink-0 self-stretch flex items-center"
+		>→</button>
+	</div>
 </div>
