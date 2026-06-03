@@ -5,7 +5,7 @@
 	let messages = $state([
 		{
 			role: 'assistant',
-			content: 'Ich bin die Schweiz. Sag mir, was dich wirklich stört. Ausländer? Deine Rente? Die Bilateralen? Ich urteile nicht — ich frage nur nach.'
+			content: 'Ich bin die Schweiz. Sag mir, was dich wirklich beschäftigt. Zu viele Zuwanderer? Die Rente? Was mit der EU passiert? Ich urteile nicht — ich frage nach.'
 		}
 	]);
 	let input = $state('');
