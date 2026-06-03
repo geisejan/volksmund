@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+	.no-scrollbar::-webkit-scrollbar { display: none; }
+	.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+@layer base {
+	* {
+		box-sizing: border-box;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	::-webkit-scrollbar {
+		width: 4px;
+	}
+	::-webkit-scrollbar-track {
+		background: #0A0A0A;
+	}
+	::-webkit-scrollbar-thumb {
+		background: #333;
+		border-radius: 2px;
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: #DC0000;
+	}
+}
+
+@layer components {
+	.tag-falsch {
+		@apply bg-red-950 text-red-400 border border-red-800 text-xs font-mono px-2 py-0.5 rounded;
+	}
+	.tag-irrefuehrend {
+		@apply bg-orange-950 text-orange-400 border border-orange-800 text-xs font-mono px-2 py-0.5 rounded;
+	}
+	.tag-uebertrieben {
+		@apply bg-yellow-950 text-yellow-400 border border-yellow-800 text-xs font-mono px-2 py-0.5 rounded;
+	}
+	.tag-wahr {
+		@apply bg-green-950 text-green-400 border border-green-800 text-xs font-mono px-2 py-0.5 rounded;
+	}
+
+	.btn-primary {
+		@apply bg-swiss-red text-white font-bold px-6 py-3 rounded-sm hover:bg-red-700 transition-colors duration-150 inline-block;
+	}
+	.btn-ghost {
+		@apply border border-swiss-border text-swiss-warm font-medium px-6 py-3 rounded-sm hover:border-swiss-red hover:text-swiss-red transition-colors duration-150 inline-block;
+	}
+
+	.card {
+		@apply bg-swiss-card border border-swiss-border rounded-sm p-6;
+	}
+}
