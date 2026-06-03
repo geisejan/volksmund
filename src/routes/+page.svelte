@@ -173,74 +173,76 @@
 		</div>
 	</section>
 
-	<!-- FAKTEN — DARUNTER -->
-	<section class="pt-10 sm:pt-16 pb-6 sm:pb-8">
-		<p class="text-swiss-red font-mono text-xs uppercase tracking-widest mb-3">Faktencheck · 14. Juni 2026</p>
-		<h2 class="text-3xl sm:text-4xl font-black text-swiss-warm leading-tight">Was behauptet wird.<br/><span class="text-swiss-muted font-normal text-xl sm:text-2xl">Was die Wissenschaft sagt.</span></h2>
-	</section>
-
-	<!-- VORLAGEN -->
-	{#each vorlagen as vorlage}
-		<section id={vorlage.id} class="py-14 border-b border-swiss-border">
-
-			<!-- VORLAGE HEADER -->
-			<div class="flex flex-wrap items-start gap-4 mb-8">
-				<div class="flex-1 min-w-0">
-					<div class="flex flex-wrap gap-2 mb-2">
-						<span class="text-xs font-mono text-swiss-muted border border-swiss-border px-2 py-0.5 rounded">{vorlage.typ}</span>
-						<span class="text-xs font-mono px-2 py-0.5 rounded border
-							{vorlage.bundesrat === 'JA' ? 'bg-green-950 text-green-400 border-green-800' : 'bg-red-950 text-red-400 border-red-800'}">
-							Bundesrat: {vorlage.bundesrat}
-						</span>
-					</div>
-					<h2 class="text-2xl font-black text-swiss-warm">{vorlage.titel}</h2>
-				</div>
-				<p class="text-swiss-muted text-sm leading-relaxed max-w-md">{vorlage.zusammenfassung}</p>
+	<!-- FAKTEN — EINGEKLAPPT -->
+	<details class="group border-t border-swiss-border">
+		<summary class="flex items-center justify-between cursor-pointer py-5 select-none list-none">
+			<div>
+				<p class="text-swiss-red font-mono text-xs uppercase tracking-widest mb-0.5">Faktencheck · 14. Juni 2026</p>
+				<p class="text-swiss-warm font-black text-lg">Was behauptet wird — was wirklich stimmt</p>
 			</div>
+			<span class="text-swiss-muted text-xl font-light transition-transform duration-200 group-open:rotate-45 flex-shrink-0 ml-4">+</span>
+		</summary>
 
-			<!-- COLUMN LABELS -->
-			<div class="grid grid-cols-2 gap-3 mb-3">
-				<div class="flex items-center gap-2">
-					<div class="w-2 h-2 rounded-full bg-red-500"></div>
-					<span class="text-xs font-mono text-swiss-muted uppercase tracking-widest">Was das Komitee behauptet</span>
-				</div>
-				<div class="flex items-center gap-2">
-					<div class="w-2 h-2 rounded-full bg-green-500"></div>
-					<span class="text-xs font-mono text-swiss-muted uppercase tracking-widest">Was die Wissenschaft sagt</span>
-				</div>
-			</div>
+		<div class="pb-10">
+			{#each vorlagen as vorlage}
+				<section id={vorlage.id} class="py-10 border-t border-swiss-border">
 
-			<!-- VERGLEICH ROWS -->
-			<div class="space-y-2">
-				{#each vorlage.vergleiche as v, i}
-					<div class="grid grid-cols-2 gap-0 rounded-sm overflow-hidden border border-swiss-border">
-
-						<!-- KOMITEE-BEHAUPTUNG -->
-						<div class="bg-red-950/20 border-r border-swiss-border p-4">
-							<p class="text-swiss-warm/90 text-sm leading-relaxed italic">{v.claim}</p>
-						</div>
-
-						<!-- FAKT -->
-						<div class="bg-swiss-card p-4">
-							<div class="flex items-start gap-2 mb-2">
-								<span class="text-xs font-mono border px-1.5 py-0.5 rounded flex-shrink-0 {urteilConfig[v.urteil].class}">{urteilConfig[v.urteil].label}</span>
-								{#if v.zahl}
-									<span class="text-xs font-mono text-swiss-red font-bold">{v.zahl}</span>
-								{/if}
+					<!-- VORLAGE HEADER -->
+					<div class="flex flex-wrap items-start gap-4 mb-6">
+						<div class="flex-1 min-w-0">
+							<div class="flex flex-wrap gap-2 mb-2">
+								<span class="text-xs font-mono text-swiss-muted border border-swiss-border px-2 py-0.5">{vorlage.typ}</span>
+								<span class="text-xs font-mono px-2 py-0.5 border
+									{vorlage.bundesrat === 'JA' ? 'bg-green-950 text-green-400 border-green-800' : 'bg-red-950 text-red-400 border-red-800'}">
+									Bundesrat: {vorlage.bundesrat}
+								</span>
 							</div>
-							<p class="text-swiss-warm text-sm leading-relaxed">{v.fakt}</p>
-							<p class="text-swiss-muted text-xs mt-2 font-mono">Quelle: {v.quelle}</p>
+							<h2 class="text-xl sm:text-2xl font-black text-swiss-warm">{vorlage.titel}</h2>
+						</div>
+						<p class="text-swiss-muted text-sm leading-relaxed max-w-md">{vorlage.zusammenfassung}</p>
+					</div>
+
+					<!-- COLUMN LABELS -->
+					<div class="grid grid-cols-2 gap-3 mb-3">
+						<div class="flex items-center gap-2">
+							<div class="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></div>
+							<span class="text-xs font-mono text-swiss-muted uppercase tracking-widest">Was behauptet wird</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<div class="w-2 h-2 rounded-full bg-green-500 flex-shrink-0"></div>
+							<span class="text-xs font-mono text-swiss-muted uppercase tracking-widest">Was wirklich stimmt</span>
 						</div>
 					</div>
-				{/each}
-			</div>
-		</section>
-	{/each}
+
+					<!-- VERGLEICH ROWS -->
+					<div class="space-y-2">
+						{#each vorlage.vergleiche as v}
+							<div class="grid grid-cols-2 gap-0 overflow-hidden border border-swiss-border">
+								<div class="bg-red-950/20 border-r border-swiss-border p-3 sm:p-4">
+									<p class="text-swiss-warm/90 text-sm leading-relaxed italic">{v.claim}</p>
+								</div>
+								<div class="bg-swiss-card p-3 sm:p-4">
+									<div class="flex items-start gap-2 mb-2">
+										<span class="text-xs font-mono border px-1.5 py-0.5 flex-shrink-0 {urteilConfig[v.urteil].class}">{urteilConfig[v.urteil].label}</span>
+										{#if v.zahl}
+											<span class="text-xs font-mono text-swiss-red font-bold">{v.zahl}</span>
+										{/if}
+									</div>
+									<p class="text-swiss-warm text-sm leading-relaxed">{v.fakt}</p>
+									<p class="text-swiss-muted text-xs mt-2 font-mono">Quelle: {v.quelle}</p>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</section>
+			{/each}
+		</div>
+	</details>
 
 	<!-- FOOTER -->
 	<footer class="border-t border-swiss-border py-8 text-center">
 		<p class="text-swiss-muted text-xs font-mono">Volksmund · Keine Partei · Keine PR · Nur Fakten · 14. Juni 2026</p>
-		<p class="text-swiss-border text-xs mt-1">Quellen: BFS, EJPD, SRF Faktencheck, Demografik-Studie SEM 2026, SECO, BSV</p>
+		<p class="text-swiss-border text-xs mt-1">Quellen: BFS, EJPD, SRF Faktencheck, Studie SEM 2026, SECO, BSV</p>
 	</footer>
 
 </div>
