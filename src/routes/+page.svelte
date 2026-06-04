@@ -13,7 +13,10 @@
 
 	function selectOpponent(id) {
 		selectedId = id;
-		messages = [{ role: 'assistant', content: OPPONENTS[id].intro }];
+		const opp = OPPONENTS[id];
+		const statements = opp.weilStatements;
+		const weil = statements[Math.floor(Math.random() * statements.length)];
+		messages = [{ role: 'assistant', content: `Ich stimme Nein, weil ${weil}. Überzeug mich vom Gegenteil.` }];
 		setTimeout(() => chatContainer?.scrollTo({ top: 0 }), 50);
 	}
 
