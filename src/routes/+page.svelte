@@ -125,7 +125,7 @@
 		</h1>
 
 		<p class="text-swiss-muted text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
-			Zwei Vorlagen. Zwei Gegner. Wähl dein Feindbild — und versuch es.
+			Zwei Vorlagen. Zwei Gegner. Wähl deinen — und versuch es.
 		</p>
 
 		<div class="grid sm:grid-cols-2 gap-4">
