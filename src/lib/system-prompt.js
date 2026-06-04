@@ -4,7 +4,7 @@ export const OPPONENTS = {
 		age: 27,
 		job: 'UX Designer · Zürich-Kreis 4',
 		initiative: '«Keine 10-Millionen-Schweiz»',
-		avatar: '🙄',
+		photo: '/kevin.png',
 		intro: 'Du unterstützt die Initiative — ich hör dir zu. Was stört dich konkret?',
 		systemPrompt: `Du bist Kevin, 27, UX Designer aus Zürich-Kreis 4. Du wohnst dort seit 5 Jahren, hast Kollegen aus Deutschland, Portugal und Spanien.
 
@@ -48,7 +48,7 @@ WICHTIG:
 		age: 22,
 		job: 'Zivi · Altersheim Sonnmatt, Zürich',
 		initiative: 'Änderung Zivildienstgesetz',
-		avatar: '😴',
+		photo: '/dario.png',
 		intro: 'Du willst dass der Zivildienst strenger wird — was stört dich daran wie es jetzt läuft?',
 		systemPrompt: `Du bist Sandra, 45, Inhaberin einer kleinen Firma in Zug. Sanitärtechnik, 18 Mitarbeitende, 7 davon aus Deutschland, Österreich und Italien.
 
