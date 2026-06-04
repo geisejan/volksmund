@@ -180,18 +180,15 @@
 		<div bind:this={chatContainer} class="flex-1 overflow-y-auto px-4 py-4 space-y-3">
 			{#each messages as msg, i}
 				{#if msg.role === 'assistant'}
-					<div class="flex items-end gap-2 max-w-[80%]">
-						<div class="w-7 h-7 rounded-full overflow-hidden flex-shrink-0 mb-0.5">
-							<img src={opponent.photo} alt={opponent.name} class="w-full h-full object-cover object-top" />
-						</div>
+					<div class="max-w-[80%]">
 						{#if msg.content === '' && loading && i === messages.length - 1}
-							<div class="bg-zinc-800 rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1.5 items-center">
+							<div class="bg-zinc-800 rounded-2xl rounded-tl-sm px-4 py-3 flex gap-1.5 items-center">
 								<div class="w-2 h-2 bg-swiss-muted rounded-full animate-bounce" style="animation-delay:0ms"></div>
 								<div class="w-2 h-2 bg-swiss-muted rounded-full animate-bounce" style="animation-delay:150ms"></div>
 								<div class="w-2 h-2 bg-swiss-muted rounded-full animate-bounce" style="animation-delay:300ms"></div>
 							</div>
 						{:else}
-							<div class="bg-zinc-800 rounded-2xl rounded-bl-sm px-4 py-3">
+							<div class="bg-zinc-800 rounded-2xl rounded-tl-sm px-4 py-3">
 								<p class="text-white text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
 							</div>
 						{/if}
