@@ -118,32 +118,36 @@
 	<!-- LANDING PAGE -->
 	<div class="max-w-3xl mx-auto px-4 py-10 sm:py-16">
 
-		<p class="text-xs font-mono text-swiss-red uppercase tracking-widest mb-5">Initiative · 14. Juni 2026</p>
+		<p class="text-xs font-mono text-swiss-red uppercase tracking-widest mb-5">Abstimmung · 14. Juni 2026</p>
 
 		<h1 class="text-4xl sm:text-6xl lg:text-7xl font-black text-swiss-warm tracking-tight leading-none mb-5">
 			Überzeug sie —<br><span class="text-swiss-red">wenn du kannst.</span>
 		</h1>
 
 		<p class="text-swiss-muted text-base sm:text-lg leading-relaxed mb-10 max-w-xl">
-			Die Initiative «Keine 10-Millionen-Schweiz» kommt am 14. Juni zur Abstimmung. Hier triffst du zwei, die dagegen sind. Sie werden nicht nachgeben.
+			Zwei Vorlagen. Zwei Gegner. Wähl dein Feindbild — und versuch es.
 		</p>
 
-		<div class="grid sm:grid-cols-2 gap-4 mb-8">
+		<div class="grid sm:grid-cols-2 gap-4">
 			{#each Object.entries(OPPONENTS) as [id, opp]}
 				<button
 					onclick={() => selectOpponent(id)}
-					class="text-left border border-swiss-border p-5 sm:p-6 hover:border-swiss-red hover:bg-swiss-red/5 active:bg-swiss-red/10 transition-all duration-150 group"
+					class="text-left border border-swiss-border hover:border-swiss-red hover:bg-swiss-red/5 active:bg-swiss-red/10 transition-all duration-150 group overflow-hidden"
 				>
-					<p class="text-xs font-mono text-swiss-muted mb-4 uppercase tracking-widest">{opp.label}</p>
-					<p class="text-xl font-black text-swiss-warm mb-0.5">{opp.name}, {opp.age}</p>
-					<p class="text-xs font-mono text-swiss-muted mb-5">{opp.job}</p>
-					<p class="text-swiss-warm/70 text-sm italic leading-relaxed mb-6">«{opp.quote}»</p>
-					<span class="text-xs font-mono text-swiss-red group-hover:underline">Herausforderung annehmen →</span>
+					<!-- Avatar -->
+					<div class="bg-swiss-card border-b border-swiss-border flex items-center justify-center py-10 text-7xl">
+						{opp.avatar}
+					</div>
+					<!-- Info -->
+					<div class="p-5">
+						<p class="text-xs font-mono text-swiss-red uppercase tracking-widest mb-3">{opp.initiative}</p>
+						<p class="text-xl font-black text-swiss-warm mb-0.5">{opp.name}, {opp.age}</p>
+						<p class="text-xs font-mono text-swiss-muted mb-5">{opp.job}</p>
+						<span class="text-xs font-mono text-swiss-red group-hover:underline">Herausforderung annehmen →</span>
+					</div>
 				</button>
 			{/each}
 		</div>
-
-		<p class="text-swiss-muted/50 text-xs font-mono">Beide lassen sich nicht überzeugen. Das ist der Punkt.</p>
 	</div>
 
 {:else}
