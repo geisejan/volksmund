@@ -101,7 +101,7 @@
 		{#if selectedId}
 			<button onclick={back} class="text-swiss-muted hover:text-swiss-warm text-xs font-mono mr-1 transition-colors">← zurück</button>
 		{/if}
-		<img src="/wordmark.png" alt="linkeratte.ch" class="h-6 w-auto object-contain" />
+		<span class="font-black text-base tracking-tight text-white">linke<span class="text-swiss-red">ratte</span>.ch</span>
 	</div>
 	<span class="text-xs font-mono bg-swiss-red/10 border border-swiss-red/30 text-swiss-red px-2 py-0.5">
 		{tage}d bis Abstimmung
