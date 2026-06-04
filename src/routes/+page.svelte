@@ -10,12 +10,14 @@
 	let loading = $state(false);
 	let chatContainer = $state(null);
 	let inputBar = $state(null);
+	let activeWeil = $state('');
 
 	function selectOpponent(id) {
 		selectedId = id;
 		const opp = OPPONENTS[id];
 		const statements = opp.weilStatements;
 		const weil = statements[Math.floor(Math.random() * statements.length)];
+		activeWeil = weil;
 		messages = [{ role: 'assistant', content: `Ich stimme Nein, weil ${weil}. Überzeug mich vom Gegenteil.` }];
 		setTimeout(() => chatContainer?.scrollTo({ top: 0 }), 50);
 	}
@@ -57,7 +59,7 @@
 			const res = await fetch('/api/chat', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ messages: messages.slice(0, -1), opponent: selectedId })
+				body: JSON.stringify({ messages: messages.slice(0, -1), opponent: selectedId, weil: activeWeil })
 			});
 			if (!res.ok) throw new Error();
 

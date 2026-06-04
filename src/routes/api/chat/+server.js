@@ -49,6 +49,10 @@ export async function POST({ request }) {
 	}
 
 	const opponent = OPPONENTS[body.opponent] ?? OPPONENTS.kevin;
+	const weil = typeof body.weil === 'string' ? body.weil.slice(0, 200) : '';
+	const systemPrompt = opponent.systemPrompt + (weil
+		? `\n\nDEIN EINSTIEGSSATZ IN DIESEM GESPRÄCH: "Ich stimme Nein, weil ${weil}. Überzeug mich vom Gegenteil." — Du erinnerst dich daran. Wenn der andere darauf eingeht, frag nicht so zurück als ob du es nicht wüsstest. Greif es auf und stell die nächste logische Frage.`
+		: '');
 	const history = body.messages.slice(-MAX_HISTORY);
 	const messages = history.map((m, i) => ({
 		role: m.role === 'user' ? 'user' : 'assistant',
@@ -61,7 +65,7 @@ export async function POST({ request }) {
 	const stream = client.messages.stream({
 		model: 'claude-sonnet-4-6',
 		max_tokens: 512,
-		system: opponent.systemPrompt,
+		system: systemPrompt,
 		messages: messages.slice(firstUser)
 	});
 
