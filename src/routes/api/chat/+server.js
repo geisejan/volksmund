@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { SYSTEM_PROMPT } from '$lib/system-prompt.js';
+import { OPPONENTS } from '$lib/system-prompt.js';
 import { ANTHROPIC_API_KEY } from '$env/static/private';
 
 const client = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
@@ -48,6 +48,7 @@ export async function POST({ request }) {
 		return new Response('Invalid request', { status: 400 });
 	}
 
+	const opponent = OPPONENTS[body.opponent] ?? OPPONENTS.kevin;
 	const history = body.messages.slice(-MAX_HISTORY);
 	const messages = history.map((m, i) => ({
 		role: m.role === 'user' ? 'user' : 'assistant',
@@ -60,7 +61,7 @@ export async function POST({ request }) {
 	const stream = client.messages.stream({
 		model: 'claude-sonnet-4-6',
 		max_tokens: 512,
-		system: SYSTEM_PROMPT,
+		system: opponent.systemPrompt,
 		messages: messages.slice(firstUser)
 	});
 
