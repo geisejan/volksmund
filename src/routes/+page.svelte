@@ -99,7 +99,7 @@
 </script>
 
 <svelte:head>
-	<title>linkeratte.ch</title>
+	<title>Volksmund — Überzeug sie, wenn du kannst</title>
 </svelte:head>
 
 <!-- HEADER -->
@@ -108,8 +108,8 @@
 		{#if selectedId}
 			<button onclick={back} class="text-swiss-muted hover:text-swiss-warm text-xs font-mono mr-1 transition-colors">← zurück</button>
 		{/if}
-		<img src="/logo-rat.png" alt="" class="h-7 w-auto object-contain rounded-full" />
-		<span class="font-black text-base tracking-tight text-white">linke<span class="text-swiss-red">ratte</span>.ch</span>
+		<img src="/logo.png" alt="Volksmund" class="h-7 w-auto object-contain" />
+		<span class="font-black text-base tracking-tight text-swiss-warm">Volks<span class="text-swiss-red">mund</span></span>
 	</div>
 	<span class="text-xs font-mono bg-swiss-red/10 border border-swiss-red/30 text-swiss-red px-2 py-0.5">
 		{tage}d bis Abstimmung
