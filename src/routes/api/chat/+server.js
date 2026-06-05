@@ -1,5 +1,6 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { OPPONENTS } from '$lib/system-prompt.js';
+import { saveConversation } from '$lib/db.js';
 import { ANTHROPIC_API_KEY } from '$env/static/private';
 
 const client = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
@@ -7,7 +8,6 @@ const client = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
 const MAX_INPUT_CHARS = 500;
 const MAX_HISTORY = 10;
 
-// In-memory rate limiter: 30 req / IP / hour
 const rlMap = new Map();
 const RL_MAX = 30;
 const RL_WINDOW = 60 * 60 * 1000;
@@ -50,9 +50,12 @@ export async function POST({ request }) {
 
 	const opponent = OPPONENTS[body.opponent] ?? OPPONENTS.kevin;
 	const weil = typeof body.weil === 'string' ? body.weil.slice(0, 200) : '';
+	const sessionId = typeof body.sessionId === 'string' ? body.sessionId.slice(0, 64) : null;
+
 	const systemPrompt = opponent.systemPrompt + (weil
 		? `\n\nDEIN EINSTIEGSSATZ IN DIESEM GESPRÄCH: "Ich stimme Nein, weil ${weil}. Überzeug mich vom Gegenteil." — Du erinnerst dich daran. Wenn der andere darauf eingeht, frag nicht so zurück als ob du es nicht wüsstest. Greif es auf und stell die nächste logische Frage.`
 		: '');
+
 	const history = body.messages.slice(-MAX_HISTORY);
 	const messages = history.map((m, i) => ({
 		role: m.role === 'user' ? 'user' : 'assistant',
@@ -72,11 +75,22 @@ export async function POST({ request }) {
 	const encoder = new TextEncoder();
 	const readable = new ReadableStream({
 		async start(controller) {
+			let full = '';
 			try {
 				for await (const chunk of stream) {
 					if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
+						full += chunk.delta.text;
 						controller.enqueue(encoder.encode(chunk.delta.text));
 					}
+				}
+				if (sessionId) {
+					const allMessages = [...body.messages, { role: 'assistant', content: full }];
+					await saveConversation({
+						sessionId,
+						opponent: body.opponent,
+						weil,
+						messages: allMessages
+					});
 				}
 			} catch {
 				controller.error(new Error('Stream error'));

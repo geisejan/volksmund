@@ -11,6 +11,7 @@
 	let chatContainer = $state(null);
 	let inputBar = $state(null);
 	let activeWeil = $state('');
+	let sessionId = $state('');
 
 	function selectOpponent(id) {
 		selectedId = id;
@@ -18,6 +19,7 @@
 		const statements = opp.weilStatements;
 		const weil = statements[Math.floor(Math.random() * statements.length)];
 		activeWeil = weil;
+		sessionId = crypto.randomUUID();
 		messages = [{ role: 'assistant', content: `Ich stimme Nein, weil ${weil}. Überzeug mich vom Gegenteil.` }];
 		setTimeout(() => chatContainer?.scrollTo({ top: 0 }), 50);
 	}
@@ -59,7 +61,7 @@
 			const res = await fetch('/api/chat', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ messages: messages.slice(0, -1), opponent: selectedId, weil: activeWeil })
+				body: JSON.stringify({ messages: messages.slice(0, -1), opponent: selectedId, weil: activeWeil, sessionId })
 			});
 			if (!res.ok) throw new Error();
 
@@ -128,6 +130,7 @@
 			Zwei Vorlagen. Zwei Gegner. Wähl deinen — und versuch es.
 		</p>
 
+
 		<!-- CHARACTER SELECT -->
 		<div class="grid sm:grid-cols-2 gap-5">
 			{#each Object.entries(OPPONENTS) as [id, opp]}
@@ -158,6 +161,7 @@
 			{/each}
 		</div>
 
+		<p class="text-swiss-muted/40 text-xs font-mono mt-6">Gespräche werden anonymisiert gespeichert.</p>
 	</div>
 
 {:else}

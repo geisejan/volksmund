@@ -4,7 +4,7 @@ export const OPPONENTS = {
 		age: 27,
 		job: 'UX Designer · Zürich-Kreis 4',
 		initiative: '«Keine 10-Millionen-Schweiz»',
-		photo: '/kevin.png',
+		photo: '/kevin.jpg',
 		weilStatements: [
 			'meine besten Kollegen aus Portugal und Deutschland kommen — ohne sie läuft nichts',
 			'die Zahlen der SVP schlicht nicht stimmen und das jeder nachprüfen kann',
@@ -54,7 +54,7 @@ WICHTIG:
 		age: 22,
 		job: 'Zivi · Altersheim Sonnmatt, Zürich',
 		initiative: 'Änderung Zivildienstgesetz',
-		photo: '/dario.png',
+		photo: '/dario.jpg',
 		weilStatements: [
 			'ich jeden Tag Menschen pflege die sonst niemanden hätten',
 			'ich 18 Monate leiste und sich hier niemand vor irgendwas drückt',

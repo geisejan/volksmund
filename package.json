@@ -20,7 +20,8 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.54.0",
-    "@sveltejs/adapter-node": "^5.5.4"
+    "@sveltejs/adapter-node": "^5.5.4",
+    "pg": "^8.21.0"
   },
   "type": "module"
 }
